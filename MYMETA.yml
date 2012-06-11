@@ -12,7 +12,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.59
 dynamic_config: 0
-generated_by: 'Module::Install version 1.06, CPAN::Meta::Converter version 2.112150'
+generated_by: 'Module::Install version 1.06, CPAN::Meta::Converter version 2.120630'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -28,7 +28,7 @@ requires:
   Exporter: 0
   HTML::Entities: 3.66
   HTML::Scrubber: 0.09
-  Lingua::JA::Regular::Unicode: 0.04
+  Lingua::JA::Regular::Unicode: 0.09
   Unicode::Normalize: 1
   perl: 5.008001
 resources:

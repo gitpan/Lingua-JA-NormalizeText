@@ -4,7 +4,7 @@
       "pawa <pawapawa@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Module::Install version 1.06, CPAN::Meta::Converter version 2.112150",
+   "generated_by" : "Module::Install version 1.06, CPAN::Meta::Converter version 2.120630",
    "license" : [
       "perl_5"
    ],
@@ -24,10 +24,10 @@
       "build" : {
          "requires" : {
             "ExtUtils::MakeMaker" : "6.59",
-            "Test::Base" : 0,
-            "Test::Fatal" : 0,
+            "Test::Base" : "0",
+            "Test::Fatal" : "0",
             "Test::More" : "0.88",
-            "Test::Requires" : 0,
+            "Test::Requires" : "0",
             "Test::Warn" : "0.2"
          }
       },
@@ -38,11 +38,11 @@
       },
       "runtime" : {
          "requires" : {
-            "Carp" : 0,
-            "Exporter" : 0,
+            "Carp" : "0",
+            "Exporter" : "0",
             "HTML::Entities" : "3.66",
             "HTML::Scrubber" : "0.09",
-            "Lingua::JA::Regular::Unicode" : "0.04",
+            "Lingua::JA::Regular::Unicode" : "0.09",
             "Unicode::Normalize" : "1",
             "perl" : "5.008001"
          }
