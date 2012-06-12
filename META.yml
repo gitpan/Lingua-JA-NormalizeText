@@ -29,11 +29,11 @@ requires:
   Exporter: 0
   HTML::Entities: 3.66
   HTML::Scrubber: 0.09
-  Lingua::JA::Regular::Unicode: 0.04
+  Lingua::JA::Regular::Unicode: 0.09
   Unicode::Normalize: 1
   perl: 5.8.1
 resources:
   bugtracker: https://github.com/pawa-/Lingua-JA-NormalizeText/issues
   license: http://dev.perl.org/licenses
   repository: https://github.com/pawa-/Lingua-JA-NormalizeText
-version: 0.01
+version: 0.03
