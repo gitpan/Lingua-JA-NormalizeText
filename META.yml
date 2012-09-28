@@ -7,7 +7,6 @@ build_requires:
   Test::Base: 0
   Test::Fatal: 0
   Test::More: 0.88
-  Test::Requires: 0
   Test::Warn: 0.2
 configure_requires:
   ExtUtils::MakeMaker: 6.59
@@ -36,4 +35,4 @@ resources:
   bugtracker: https://github.com/pawa-/Lingua-JA-NormalizeText/issues
   license: http://dev.perl.org/licenses
   repository: https://github.com/pawa-/Lingua-JA-NormalizeText
-version: 0.06
+version: 0.10
