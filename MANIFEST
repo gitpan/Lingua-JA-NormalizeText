@@ -40,6 +40,8 @@ t/21_remove_head_space_remove_tail_space.t
 t/22_old2new_kana.t
 t/23_uc.t
 t/24_old2new_kanji.t
+t/25_tab2space.t
+t/26_remove_controls.t
 t/80_combination.t
 t/89_all_opts.t
 t/CR
