@@ -42,6 +42,7 @@ t/25_tab2space.t
 t/26_remove_controls.t
 t/27_dakuon.t
 t/28_unify_whitespaces.t
+t/29_remove_spaces.t
 t/80_combination.t
 t/81_return_value.t
 t/89_all_opts.t
