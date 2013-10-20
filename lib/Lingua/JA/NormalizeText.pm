@@ -13,7 +13,7 @@ use HTML::Scrubber     ();
 use Lingua::JA::Regular::Unicode ();
 use Lingua::JA::Dakuon ();
 
-our $VERSION   = '0.22';
+our $VERSION   = '0.23';
 our @EXPORT    = qw();
 our @EXPORT_OK = qw(nfkc nfkd nfc nfd decode_entities strip_html
 alnum_z2h alnum_h2z space_z2h space_h2z katakana_z2h katakana_h2z
@@ -103,12 +103,12 @@ sub dakuon_normalize     { Lingua::JA::Dakuon::dakuon_normalize(shift);     }
 sub handakuon_normalize  { Lingua::JA::Dakuon::handakuon_normalize(shift);  }
 sub all_dakuon_normalize { Lingua::JA::Dakuon::all_dakuon_normalize(shift); }
 
-sub wave2tilde           { local $_ = shift; return unless defined $_; tr/\x{301C}/\x{FF5E}/; $_; }
+sub wave2tilde           { local $_ = shift; return unless defined $_; tr/\x{301C}\x{3030}/\x{FF5E}/; $_; }
 sub tilde2wave           { local $_ = shift; return unless defined $_; tr/\x{FF5E}/\x{301C}/; $_; }
-sub wavetilde2long       { local $_ = shift; return unless defined $_; tr/\x{301C}\x{FF5E}/\x{30FC}/; $_; }
-sub wave2long            { local $_ = shift; return unless defined $_; tr/\x{301C}/\x{30FC}/; $_; }
+sub wavetilde2long       { local $_ = shift; return unless defined $_; tr/\x{301C}\x{3030}\x{FF5E}/\x{30FC}/; $_; }
+sub wave2long            { local $_ = shift; return unless defined $_; tr/\x{301C}\x{3030}/\x{30FC}/; $_; }
 sub tilde2long           { local $_ = shift; return unless defined $_; tr/\x{FF5E}/\x{30FC}/; $_; }
-sub fullminus2long       { local $_ = shift; return unless defined $_; tr/\x{2212}/\x{30FC}/; $_; }
+sub fullminus2long       { local $_ = shift; return unless defined $_; tr/\x{FF0D}/\x{30FC}/; $_; }
 sub dashes2long          { local $_ = shift; return unless defined $_; tr/\x{2012}\x{2013}\x{2014}\x{2015}/\x{30FC}/; $_; }
 sub drawing_lines2long   { local $_ = shift; return unless defined $_; tr/\x{2500}\x{2501}\x{254C}\x{254D}\x{2574}\x{2576}\x{2578}\x{257A}/\x{30FC}/; $_; }
 sub unify_long_repeats   { local $_ = shift; return unless defined $_; tr/\x{30FC}/\x{30FC}/s; $_; }
@@ -200,12 +200,12 @@ The following options are available:
   katakana_h2z           ｽｰﾊｰｽｰﾊｰ               スーハースーハー
   katakana2hiragana      パンツ                 ぱんつ
   hiragana2katakana      ぱんつ                 パンツ
-  wave2tilde             〜                     ～
+  wave2tilde             〜, 〰                 ～
   tilde2wave             ～                     〜
-  wavetilde2long         〜, ～                 ー
-  wave2long              〜                     ー
+  wavetilde2long         〜, 〰, ～             ー
+  wave2long              〜, 〰                 ー
   tilde2long             ～                     ー
-  fullminus2long         −                      ー
+  fullminus2long         －                     ー
   dashes2long            —                      ー
   drawing_lines2long     ─                      ー
   unify_long_repeats     ヴァーーー             ヴァー
@@ -243,6 +243,10 @@ normalizes $text.
 =head2 dashes2long
 
 Note that this option does not convert hyphens into long.
+
+=head2 drawing_line2long
+
+This option converts drawing lines which are similar to long(U+30FC) in appearance.
 
 =head2 unify_long_spaces
 
