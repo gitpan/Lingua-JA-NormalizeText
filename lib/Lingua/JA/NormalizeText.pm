@@ -7,13 +7,14 @@ use utf8;
 
 use Carp ();
 use Exporter           qw/import/;
+use Sub::Install       ();
 use Unicode::Normalize ();
 use HTML::Entities     ();
 use HTML::Scrubber     ();
 use Lingua::JA::Regular::Unicode ();
 use Lingua::JA::Dakuon ();
 
-our $VERSION   = '0.23';
+our $VERSION   = '0.24';
 our @EXPORT    = qw();
 our @EXPORT_OK = qw(nfkc nfkd nfc nfd decode_entities strip_html
 alnum_z2h alnum_h2z space_z2h space_h2z katakana_z2h katakana_h2z
@@ -31,13 +32,40 @@ my %AVAILABLE_OPTS;
 
 our $SCRUBBER = HTML::Scrubber->new;
 
+# this does not work on Perl 5.8.8
+# - couldn't find subroutine named lc in package CORE
+# - Undefined subroutine &CORE::lc called
+#Sub::Install::install_sub({ code => 'lc',                   from => 'CORE',                         into => __PACKAGE__, as => 'lc'                   });
+#Sub::Install::install_sub({ code => 'uc',                   from => 'CORE',                         into => __PACKAGE__, as => 'uc'                   });
+#Sub::Install::install_sub({ code =>  \&CORE::lc,                                                    into => __PACKAGE__, as => 'lc'                   });
+#Sub::Install::install_sub({ code =>  \&CORE::uc,                                                    into => __PACKAGE__, as => 'uc'                   });
+
+Sub::Install::install_sub({ code => 'NFKC',                 from => 'Unicode::Normalize',           into => __PACKAGE__, as => 'nfkc'                 });
+Sub::Install::install_sub({ code => 'NFKD',                 from => 'Unicode::Normalize',           into => __PACKAGE__, as => 'nfkd'                 });
+Sub::Install::install_sub({ code => 'NFC',                  from => 'Unicode::Normalize',           into => __PACKAGE__, as => 'nfc'                  });
+Sub::Install::install_sub({ code => 'NFD',                  from => 'Unicode::Normalize',           into => __PACKAGE__, as => 'nfd'                  });
+Sub::Install::install_sub({ code => 'decode_entities',      from => 'HTML::Entities',               into => __PACKAGE__, as => 'decode_entities'      });
+Sub::Install::install_sub({ code => 'alnum_z2h',            from => 'Lingua::JA::Regular::Unicode', into => __PACKAGE__, as => 'alnum_z2h'            });
+Sub::Install::install_sub({ code => 'alnum_h2z',            from => 'Lingua::JA::Regular::Unicode', into => __PACKAGE__, as => 'alnum_h2z'            });
+Sub::Install::install_sub({ code => 'space_z2h',            from => 'Lingua::JA::Regular::Unicode', into => __PACKAGE__, as => 'space_z2h'            });
+Sub::Install::install_sub({ code => 'space_h2z',            from => 'Lingua::JA::Regular::Unicode', into => __PACKAGE__, as => 'space_h2z'            });
+Sub::Install::install_sub({ code => 'katakana_z2h',         from => 'Lingua::JA::Regular::Unicode', into => __PACKAGE__, as => 'katakana_z2h'         });
+Sub::Install::install_sub({ code => 'katakana_h2z',         from => 'Lingua::JA::Regular::Unicode', into => __PACKAGE__, as => 'katakana_h2z'         });
+Sub::Install::install_sub({ code => 'katakana2hiragana',    from => 'Lingua::JA::Regular::Unicode', into => __PACKAGE__, as => 'katakana2hiragana'    });
+Sub::Install::install_sub({ code => 'hiragana2katakana',    from => 'Lingua::JA::Regular::Unicode', into => __PACKAGE__, as => 'hiragana2katakana'    });
+Sub::Install::install_sub({ code => 'dakuon_normalize',     from => 'Lingua::JA::Dakuon',           into => __PACKAGE__, as => 'dakuon_normalize'     });
+Sub::Install::install_sub({ code => 'handakuon_normalize',  from => 'Lingua::JA::Dakuon',           into => __PACKAGE__, as => 'handakuon_normalize'  });
+Sub::Install::install_sub({ code => 'all_dakuon_normalize', from => 'Lingua::JA::Dakuon',           into => __PACKAGE__, as => 'all_dakuon_normalize' });
 
 sub new
 {
-    my ($class, @opts) = @_;
-    my $self = bless {}, $class;
+    my ($class) = shift;
+
+    my @opts = (ref $_[0] eq 'ARRAY' ? @{$_[0]} : @_);
 
     Carp::croak("at least one option is required") unless scalar @opts;
+
+    my $self = bless {}, $class;
 
     $self->{converters} = [];
 
@@ -78,30 +106,10 @@ sub normalize
     return $text;
 }
 
-sub lc   { lc(shift); }
-sub uc   { uc(shift); }
-
-sub nfkc { Unicode::Normalize::NFKC(shift); }
-sub nfkd { Unicode::Normalize::NFKD(shift); }
-sub nfc  { Unicode::Normalize::NFC(shift);  }
-sub nfd  { Unicode::Normalize::NFD(shift);  }
-
-sub decode_entities { HTML::Entities::decode_entities(shift); }
+sub lc { return defined $_[0] ? CORE::lc $_[0] : undef; }
+sub uc { return defined $_[0] ? CORE::uc $_[0] : undef; }
 
 sub strip_html { $SCRUBBER->scrub(shift); }
-
-sub alnum_z2h         { Lingua::JA::Regular::Unicode::alnum_z2h(shift);         }
-sub alnum_h2z         { Lingua::JA::Regular::Unicode::alnum_h2z(shift);         }
-sub space_z2h         { Lingua::JA::Regular::Unicode::space_z2h(shift);         }
-sub space_h2z         { Lingua::JA::Regular::Unicode::space_h2z(shift);         }
-sub katakana_z2h      { Lingua::JA::Regular::Unicode::katakana_z2h(shift);      }
-sub katakana_h2z      { Lingua::JA::Regular::Unicode::katakana_h2z(shift);      }
-sub katakana2hiragana { Lingua::JA::Regular::Unicode::katakana2hiragana(shift); }
-sub hiragana2katakana { Lingua::JA::Regular::Unicode::hiragana2katakana(shift); }
-
-sub dakuon_normalize     { Lingua::JA::Dakuon::dakuon_normalize(shift);     }
-sub handakuon_normalize  { Lingua::JA::Dakuon::handakuon_normalize(shift);  }
-sub all_dakuon_normalize { Lingua::JA::Dakuon::all_dakuon_normalize(shift); }
 
 sub wave2tilde           { local $_ = shift; return unless defined $_; tr/\x{301C}\x{3030}/\x{FF5E}/; $_; }
 sub tilde2wave           { local $_ = shift; return unless defined $_; tr/\x{FF5E}/\x{301C}/; $_; }
