@@ -45,6 +45,9 @@ t/26_remove_controls.t
 t/27_dakuon.t
 t/28_unify_whitespaces.t
 t/29_remove_spaces.t
+t/30_square2katakana.t
+t/31_circled2kana.t
+t/32_circled2kanji.t
 t/80_combination.t
 t/81_return_value.t
 t/82_multiple_use.t
