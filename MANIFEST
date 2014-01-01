@@ -57,4 +57,5 @@ xt/02_perlcritic.t
 xt/03_pod.t
 xt/04_synopsis.t
 xt/05_synopsis_expectation.t
+xt/10_white_space.t
 xt/perlcriticrc
