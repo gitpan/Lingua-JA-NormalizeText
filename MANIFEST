@@ -48,6 +48,7 @@ t/29_remove_spaces.t
 t/30_square2katakana.t
 t/31_circled2kana.t
 t/32_circled2kanji.t
+t/33_remove_DFC.t
 t/80_combination.t
 t/81_return_value.t
 t/82_multiple_use.t
