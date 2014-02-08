@@ -27,6 +27,10 @@ no_index:
     - examples
     - author
     - builder
+provides:
+  Lingua::JA::NormalizeText:
+    file: lib/Lingua/JA/NormalizeText.pm
+    version: 0.40
 requires:
   Carp: 0
   Exporter: 0
@@ -42,7 +46,7 @@ resources:
   bugtracker: https://github.com/pawa-/Lingua-JA-NormalizeText/issues
   homepage: https://github.com/pawa-/Lingua-JA-NormalizeText
   repository: git://github.com/pawa-/Lingua-JA-NormalizeText
-version: 0.33_01
+version: 0.40
 x_contributors:
   - 'pawa <pawa@dojikko.com>'
   - 'pawa <pawa@pawafuru.com>'

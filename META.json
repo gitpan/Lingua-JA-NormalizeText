@@ -63,7 +63,13 @@
          }
       }
    },
-   "release_status" : "unstable",
+   "provides" : {
+      "Lingua::JA::NormalizeText" : {
+         "file" : "lib/Lingua/JA/NormalizeText.pm",
+         "version" : "0.40"
+      }
+   },
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/pawa-/Lingua-JA-NormalizeText/issues"
@@ -74,7 +80,7 @@
          "web" : "https://github.com/pawa-/Lingua-JA-NormalizeText"
       }
    },
-   "version" : "0.33_01",
+   "version" : "0.40",
    "x_contributors" : [
       "pawa <pawa@dojikko.com>",
       "pawa <pawa@pawafuru.com>"
