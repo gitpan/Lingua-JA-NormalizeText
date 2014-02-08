@@ -3,15 +3,15 @@ abstract: 'All-in-One Japanese text normalizer'
 author:
   - 'pawa <pawapawa@cpan.org>'
 build_requires:
-  ExtUtils::MakeMaker: 6.59
   Test::Fatal: 0
-  Test::More: 0.88
-  Test::Warn: 0.2
+  Test::More: 0.99
+  Test::Warn: 0.20
 configure_requires:
-  ExtUtils::MakeMaker: 6.59
-distribution_type: module
-dynamic_config: 1
-generated_by: 'Module::Install version 1.06'
+  CPAN::Meta: 0
+  CPAN::Meta::Prereqs: 0
+  Module::Build: 0.38
+dynamic_config: 0
+generated_by: 'Minilla/v0.11.0, CPAN::Meta::Converter version 2.133380'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -19,22 +19,30 @@ meta-spec:
 name: Lingua-JA-NormalizeText
 no_index:
   directory:
-    - inc
     - t
     - xt
+    - inc
+    - share
+    - eg
+    - examples
+    - author
+    - builder
 requires:
   Carp: 0
   Exporter: 0
   HTML::Entities: 3.66
-  HTML::Scrubber: 0.1
+  HTML::Scrubber: 0.10
   Lingua::JA::Dakuon: 0
-  Lingua::JA::Moji: 0.3
+  Lingua::JA::Moji: 0.30
   Lingua::JA::Regular::Unicode: 0.11
   Sub::Install: 0
-  Unicode::Normalize: 1
-  perl: 5.8.1
+  Unicode::Normalize: 1.00
+  perl: 5.008001
 resources:
   bugtracker: https://github.com/pawa-/Lingua-JA-NormalizeText/issues
-  license: http://dev.perl.org/licenses
-  repository: https://github.com/pawa-/Lingua-JA-NormalizeText
-version: 0.32
+  homepage: https://github.com/pawa-/Lingua-JA-NormalizeText
+  repository: git://github.com/pawa-/Lingua-JA-NormalizeText
+version: 0.33_01
+x_contributors:
+  - 'pawa <pawa@dojikko.com>'
+  - 'pawa <pawa@pawafuru.com>'
