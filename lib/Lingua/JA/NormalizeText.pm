@@ -15,7 +15,7 @@ use Lingua::JA::Regular::Unicode ();
 use Lingua::JA::Dakuon ();
 use Lingua::JA::Moji   ();
 
-our $VERSION   = '0.40';
+our $VERSION   = '0.41';
 our @EXPORT    = qw();
 our @EXPORT_OK = qw(nfkc nfkd nfc nfd decode_entities strip_html
 alnum_z2h alnum_h2z space_z2h space_h2z katakana_z2h katakana_h2z
@@ -26,12 +26,21 @@ unify_whitespaces unify_nl trim ltrim rtrim old2new_kana old2new_kanji
 tab2space remove_controls remove_spaces dakuon_normalize
 handakuon_normalize all_dakuon_normalize
 square2katakana circled2kana circled2kanji
-remove_DFC);
+remove_DFC decompose_parenthesized_kanji);
 
 our %EXPORT_TAGS = ( all => [ @EXPORT, @EXPORT_OK ] );
 
 my %AVAILABLE_OPTS;
 @AVAILABLE_OPTS{ (qw/lc uc/, @EXPORT_OK) } = ();
+
+my %parenthesized_kanji_map = (
+    '㈠' => '一',  '㈡' => '二',  '㈢' => '三',  '㈣' => '四',  '㈤' => '五',  '㈥' => '六',
+    '㈦' => '七',  '㈧' => '八',  '㈨' => '九',  '㈩' => '十',  '㈪' => '月',  '㈫' => '火',
+    '㈬' => '水',  '㈭' => '木',  '㈮' => '金',  '㈯' => '土',  '㈰' => '日',  '㈱' => '株',
+    '㈲' => '有',  '㈳' => '社',  '㈴' => '名',  '㈵' => '特',  '㈶' => '財',  '㈷' => '祝',
+    '㈸' => '労',  '㈹' => '代',  '㈺' => '呼',  '㈻' => '学',  '㈼' => '監',  '㈽' => '企',
+    '㈾' => '資',  '㈿' => '協',  '㉀' => '祭',  '㉁' => '休',  '㉂' => '自',  '㉃' => '至',
+);
 
 our $SCRUBBER = HTML::Scrubber->new;
 
@@ -138,6 +147,8 @@ sub remove_controls      { local $_ = shift; return undef unless defined $_; tr/
 sub remove_spaces        { local $_ = shift; return undef unless defined $_; tr/\x{0020}\x{3000}//d; $_; }
 sub remove_DFC           { local $_ = shift; return undef unless defined $_; tr/\x{061C}\x{2066}-\x{2069}\x{200E}\x{200F}\x{202A}-\x{202E}//d; $_; }
 
+sub decompose_parenthesized_kanji { local $_ = shift; return undef unless defined $_; s/([\x{3220}-\x{3243}])/"($parenthesized_kanji_map{$1})"/ge; $_; }
+
 sub old2new_kanji
 {
     local $_ = shift;
@@ -242,6 +253,7 @@ The following options are available:
   square2katakana        ㌢                     センチ
   circled2kana           ㋙㋛㋑㋟㋑             コシイタイ
   circled2kanji          ㊩㊫㊚㊒㊖             医学男有財
+  decompose_parenthesized_kanji  ㈱             (株)
 
 The order in which these options are applied is according to the order of
 the elements of @options.
@@ -550,6 +562,12 @@ See L<Lingua::JA::Dakuon>.
 =head2 square2katakana, circled2kana, circled2kanji
 
 See L<Lingua::JA::Moji>.
+
+=head2 decompose_parenthesized_kanji
+
+Decomposes the following parenthesized kanji:
+
+  ㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩㈪㈫㈬㈭㈮㈯㈰㈱㈲㈳㈴㈵㈶㈷㈸㈹㈺㈻㈼㈽㈾㈿㉀㉁㉂㉃
 
 
 =head1 AUTHOR

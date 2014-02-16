@@ -3,6 +3,8 @@ Changes
 LICENSE
 META.json
 README.md
+author/benchmark/bracketed2kanji_vs_decompose_parenthesized_kanji.pl
+author/benchmark/destructive_vs_nondestructive.pl
 author/benchmark/redefinition_vs_subinstall
 author/benchmark/redefinition_vs_subinstall.pl
 cpanfile
@@ -40,6 +42,7 @@ t/30_square2katakana.t
 t/31_circled2kana.t
 t/32_circled2kanji.t
 t/33_remove_DFC.t
+t/34_decompose_parenthesized_kanji.t
 t/80_combination.t
 t/81_return_value.t
 t/82_return_value_list_context.t
@@ -48,5 +51,6 @@ t/89_all_opts.t
 xt/01_synopsis_expectation.t
 xt/10_white_space.t
 xt/11_controls.t
+xt/12_parenthesized_ideograph
 META.yml
 MANIFEST
