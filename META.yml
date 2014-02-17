@@ -30,14 +30,14 @@ no_index:
 provides:
   Lingua::JA::NormalizeText:
     file: lib/Lingua/JA/NormalizeText.pm
-    version: 0.41
+    version: 0.42
 requires:
   Carp: 0
   Exporter: 0
   HTML::Entities: 3.66
   HTML::Scrubber: 0.10
   Lingua::JA::Dakuon: 0
-  Lingua::JA::Moji: 0.30
+  Lingua::JA::Moji: 0.32
   Lingua::JA::Regular::Unicode: 0.11
   Sub::Install: 0
   Unicode::Normalize: 1.00
@@ -46,7 +46,7 @@ resources:
   bugtracker: https://github.com/pawa-/Lingua-JA-NormalizeText/issues
   homepage: https://github.com/pawa-/Lingua-JA-NormalizeText
   repository: git://github.com/pawa-/Lingua-JA-NormalizeText
-version: 0.41
+version: 0.42
 x_contributors:
   - 'pawa <pawa@dojikko.com>'
   - 'pawa <pawa@pawafuru.com>'
