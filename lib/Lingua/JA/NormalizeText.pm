@@ -15,7 +15,7 @@ use Lingua::JA::Regular::Unicode ();
 use Lingua::JA::Dakuon ();
 use Lingua::JA::Moji   ();
 
-our $VERSION   = '0.42';
+our $VERSION   = '0.43';
 our @EXPORT    = qw();
 our @EXPORT_OK = qw(nfkc nfkd nfc nfd decode_entities strip_html
 alnum_z2h alnum_h2z space_z2h space_h2z katakana_z2h katakana_h2z
@@ -576,7 +576,9 @@ pawa E<lt>pawapawa@cpan.orgE<gt>
 
 =head1 SEE ALSO
 
-新旧字体表: L<http://www.asahi-net.or.jp/~ax2s-kmtn/ref/old_chara.html>
+L<新旧字体表|http://www.asahi-net.or.jp/~ax2s-kmtn/ref/old_chara.html>
+
+L<康熙字典|http://ja.wikipedia.org/wiki/%E5%BA%B7%E7%86%99%E5%AD%97%E5%85%B8>
 
 L<Lingua::JA::Regular::Unicode>
 
