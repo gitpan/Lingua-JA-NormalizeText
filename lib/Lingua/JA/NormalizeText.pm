@@ -7,7 +7,6 @@ use utf8;
 
 use Carp ();
 use Exporter           qw/import/;
-use Sub::Install       ();
 use Unicode::Normalize ();
 use HTML::Entities     ();
 use HTML::Scrubber     ();
@@ -15,7 +14,7 @@ use Lingua::JA::Regular::Unicode ();
 use Lingua::JA::Dakuon ();
 use Lingua::JA::Moji   ();
 
-our $VERSION   = '0.43';
+our $VERSION   = '0.45';
 our @EXPORT    = qw();
 our @EXPORT_OK = qw(nfkc nfkd nfc nfd decode_entities strip_html
 alnum_z2h alnum_h2z space_z2h space_h2z katakana_z2h katakana_h2z
@@ -44,33 +43,34 @@ my %parenthesized_kanji_map = (
 
 our $SCRUBBER = HTML::Scrubber->new;
 
-# This does not work on Perl 5.8.8
+# This does not work on Perl 5.8.8 !!
+# Error message:
 # - couldn't find subroutine named lc in package CORE
 # - Undefined subroutine &CORE::lc called
-#Sub::Install::install_sub({ code => 'lc',                   from => 'CORE',                         as => 'lc'                   });
-#Sub::Install::install_sub({ code => 'uc',                   from => 'CORE',                         as => 'uc'                   });
-#Sub::Install::install_sub({ code =>  \&CORE::lc,                                                    as => 'lc'                   });
-#Sub::Install::install_sub({ code =>  \&CORE::uc,                                                    as => 'uc'                   });
+#*lc = \&CORE::lc;
+#*uc = \&CORE::uc;
 
-Sub::Install::install_sub({ code => 'NFKC',                 from => 'Unicode::Normalize',           as => 'nfkc'                 });
-Sub::Install::install_sub({ code => 'NFKD',                 from => 'Unicode::Normalize',           as => 'nfkd'                 });
-Sub::Install::install_sub({ code => 'NFC',                  from => 'Unicode::Normalize',           as => 'nfc'                  });
-Sub::Install::install_sub({ code => 'NFD',                  from => 'Unicode::Normalize',           as => 'nfd'                  });
-Sub::Install::install_sub({ code => 'decode_entities',      from => 'HTML::Entities',               as => 'decode_entities'      });
-Sub::Install::install_sub({ code => 'alnum_z2h',            from => 'Lingua::JA::Regular::Unicode', as => 'alnum_z2h'            });
-Sub::Install::install_sub({ code => 'alnum_h2z',            from => 'Lingua::JA::Regular::Unicode', as => 'alnum_h2z'            });
-Sub::Install::install_sub({ code => 'space_z2h',            from => 'Lingua::JA::Regular::Unicode', as => 'space_z2h'            });
-Sub::Install::install_sub({ code => 'space_h2z',            from => 'Lingua::JA::Regular::Unicode', as => 'space_h2z'            });
-Sub::Install::install_sub({ code => 'katakana_z2h',         from => 'Lingua::JA::Regular::Unicode', as => 'katakana_z2h'         });
-Sub::Install::install_sub({ code => 'katakana_h2z',         from => 'Lingua::JA::Regular::Unicode', as => 'katakana_h2z'         });
-Sub::Install::install_sub({ code => 'katakana2hiragana',    from => 'Lingua::JA::Regular::Unicode', as => 'katakana2hiragana'    });
-Sub::Install::install_sub({ code => 'hiragana2katakana',    from => 'Lingua::JA::Regular::Unicode', as => 'hiragana2katakana'    });
-Sub::Install::install_sub({ code => 'dakuon_normalize',     from => 'Lingua::JA::Dakuon',           as => 'dakuon_normalize'     });
-Sub::Install::install_sub({ code => 'handakuon_normalize',  from => 'Lingua::JA::Dakuon',           as => 'handakuon_normalize'  });
-Sub::Install::install_sub({ code => 'all_dakuon_normalize', from => 'Lingua::JA::Dakuon',           as => 'all_dakuon_normalize' });
-Sub::Install::install_sub({ code => 'square2katakana',      from => 'Lingua::JA::Moji',             as => 'square2katakana'      });
-Sub::Install::install_sub({ code => 'circled2kana',         from => 'Lingua::JA::Moji',             as => 'circled2kana'         });
-Sub::Install::install_sub({ code => 'circled2kanji',        from => 'Lingua::JA::Moji',             as => 'circled2kanji'        });
+*nfkc                 = \&Unicode::Normalize::NFKC;
+*nfkd                 = \&Unicode::Normalize::NFKD;
+*nfc                  = \&Unicode::Normalize::NFC;
+*nfd                  = \&Unicode::Normalize::NFD;
+*decode_entities      = \&HTML::Entities::decode_entities;
+*alnum_z2h            = \&Lingua::JA::Regular::Unicode::alnum_z2h;
+*alnum_h2z            = \&Lingua::JA::Regular::Unicode::alnum_h2z;
+*space_z2h            = \&Lingua::JA::Regular::Unicode::space_z2h;
+*space_h2z            = \&Lingua::JA::Regular::Unicode::space_h2z;
+*katakana_z2h         = \&Lingua::JA::Regular::Unicode::katakana_z2h;
+*katakana_h2z         = \&Lingua::JA::Regular::Unicode::katakana_h2z;
+*katakana2hiragana    = \&Lingua::JA::Regular::Unicode::katakana2hiragana;
+*hiragana2katakana    = \&Lingua::JA::Regular::Unicode::hiragana2katakana;
+*dakuon_normalize     = \&Lingua::JA::Dakuon::dakuon_normalize;
+*handakuon_normalize  = \&Lingua::JA::Dakuon::handakuon_normalize;
+*all_dakuon_normalize = \&Lingua::JA::Dakuon::all_dakuon_normalize;
+*square2katakana      = \&Lingua::JA::Moji::square2katakana;
+*circled2kana         = \&Lingua::JA::Moji::circled2kana;
+*circled2kanji        = \&Lingua::JA::Moji::circled2kanji;
+
+$Lingua::JA::Dakuon::EnableCombining = 1;
 
 sub new
 {
@@ -98,7 +98,7 @@ sub new
         }
         else
         {
-            # external function
+            # external functions
             push( @{ $self->{converters} }, $opt );
         }
     }
@@ -135,7 +135,7 @@ sub dashes2long          { local $_ = shift; return undef unless defined $_; tr/
 sub drawing_lines2long   { local $_ = shift; return undef unless defined $_; tr/\x{2500}\x{2501}\x{254C}\x{254D}\x{2574}\x{2576}\x{2578}\x{257A}/\x{30FC}/; $_; }
 sub unify_long_repeats   { local $_ = shift; return undef unless defined $_; tr/\x{30FC}/\x{30FC}/s; $_; }
 sub unify_long_spaces    { local $_ = shift; return undef unless defined $_; tr/\x{0020}/\x{0020}/s; tr/\x{3000}/\x{3000}/s; s/[\x{0020}\x{3000}]{2,}/\x{0020}/g; $_; }
-sub unify_whitespaces    { local $_ = shift; return undef unless defined $_; tr/\x{000B}\x{000C}\x{0085}\x{00A0}\x{1680}\x{180E}\x{2000}-\x{200A}\x{2028}\x{2029}\x{202F}\x{205F}/\x{0020}/; $_; }
+sub unify_whitespaces    { local $_ = shift; return undef unless defined $_; tr/\x{000B}\x{000C}\x{0085}\x{00A0}\x{1680}\x{2000}-\x{200A}\x{2028}\x{2029}\x{202F}\x{205F}/\x{0020}/; $_; }
 sub trim                 { local $_ = shift; return undef unless defined $_; s/^\s+//; s/\s+$//; $_; }
 sub ltrim                { local $_ = shift; return undef unless defined $_; s/^\s+//; $_; }
 sub rtrim                { local $_ = shift; return undef unless defined $_; s/\s+$//; $_; }
@@ -197,7 +197,8 @@ Lingua::JA::NormalizeText - All-in-One Japanese text normalizer
 
 =head1 DESCRIPTION
 
-All-in-One Japanese text normalizer.
+This module provides a lot of Japanese text normalization options.
+These options facilitate Japanese text pre-processing.
 
 =head1 METHODS
 
@@ -231,8 +232,8 @@ The following options are available:
   wave2long              〜, 〰                 ー
   tilde2long             ～                     ー
   fullminus2long         －                     ー
-  dashes2long            —                      ー
-  drawing_lines2long     ─                      ー
+  dashes2long            —                     ー
+  drawing_lines2long     ─                     ー
   unify_long_repeats     ヴァーーー             ヴァー
   nl2space               (LF)(CR)(CRLF}         (space)(space)(space)
   unify_nl               (LF)(CR)(CRLF)         \n\n\n
@@ -292,17 +293,17 @@ Converts English alphabet, numbers and symbols ZENKAKU <-> HANKAKU.
 
 ZENKAKU:
 
-  ＇［ｖｏ，～４ｃ９Ｆｕ＿ＭＧＴＷＰｑ￣｠ＶｉＩｒ：ＺＸ］ｌ＞
-  ｝￦！｜ｘ６％ｔ＾８ｅＤＫ５ｊ－￠ｈ１｛Ｕ２ＮＨ＆０＃Ｏｎ￢
-  ＠｟ｆ３ＱａｐＪ￥？Ａｗ＼＄＂ＢｍＣ７；￤＝ｙ＋ｇＹＲｂＬｋ
-  ）Ｓ｀Ｅ（￡＊．ｚｓ／＜ｄ
+  ！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞
+  ？＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ［＼
+  ］＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ
+  ｛｜｝～｟｠￠￡￢￣￤￥￦
 
 HANKAKU:
 
-  '[vo,~4c9Fu_MGTWPq¯⦆ViIr:ZX]l>
-  }₩!|x6%t^8eDK5j-¢h1{U2NH&0#On¬
-  @⦅f3QapJ¥?Aw\$"BmC7;¦=y+gYRbLk
-  )S`E(£*.zs/<d
+  !"#$%&'()*+,-./0123456789:;<=>
+  ?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\
+  ]^_`abcdefghijklmnopqrstuvwxyz
+  {|}~¢£¥¦¬¯₩⦅⦆
 
 
 =head2 space_z2h, space_h2z
@@ -315,39 +316,37 @@ Converts katakanas ZENKAKU <-> HANKAKU.
 
 See L<Lingua::JA::Regular::Unicode>.
 
-
 =head2 hiragana2katakana
 
 INPUT:
 
-  ぷゔにむていでべゞゐふとおりげそづよはつざしゃのっねひぃたょ
-  けまれびやがぽぬぺくぞぱごをへずかぴゅゎあきゖぇどだろもえわ
-  んぶぜめなちばぢるすぁゕぼらぉゝぐほさゑぎみせじこぅゆう
+  ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞ
+  ただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼ
+  ぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖゝゞ
 
 OUTPUT FOR INPUT:
 
-  プヴニムテイデベヾヰフトオリゲソヅヨハツザシャノッネヒィタョ
-  ケマレビヤガポヌペクゾパゴヲヘズカピュヮアキヶェドダロモエワ
-  ンブゼメナチバヂルスァヵボラォヽグホサヱギミセジコゥユウ
+  ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾ
+  タダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボ
+  ポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヽヾ
 
 
 =head2 katakana2hiragana
 
 INPUT:
 
-  ﾘボズシｷｭﾙﾈグネキｪヱテｸニﾄﾛドェコヽﾁガﾍトｩダヤレ
-  ﾆチソノｿｻパヨｧﾉﾊゴゲｫヮモヰルヲムｱﾃゼポフハャサッラ
-  ﾏアィョｳｵオクメﾕゥヂギﾒウﾅスｽﾗｾザブﾌヘｺｶペカｲヾ
-  エﾜヴンﾀｬﾎｮﾖツゾバプﾓセﾑｹリデﾐミホケイヒｯユﾂマヵ
-  タﾚピジｼﾇビヅヌｨﾝｴァォヶナｦュﾔロﾋベワ
+  ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾ
+  タダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボ
+  ポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヽヾ
+  ｦｧｨｩｪｫｬｭｮｯｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ
 
 OUTPUT FOR INPUT:
 
-  りぼずしきゅるねぐねきぇゑてくにとろどぇこゝちがへとぅだやれ
-  にちそのそさぱよぁのはごげぉゎもゐるをむあてぜぽふはゃさっら
-  まあぃょうおおくめゆぅぢぎめうなすすらせざぶふへこかぺかいゞ
-  えわゔんたゃほょよつぞばぷもせむけりでみみほけいひっゆつまゕ
-  たれぴじしぬびづぬぃんえぁぉゖなをゅやろひべわ
+  ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞ
+  ただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼ
+  ぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖゝゞ
+  をぁぃぅぇぉゃゅょっあいうえおかきくけこさしすせそたちつてと
+  なにぬねのはひふへほまみむめもやゆよらりるれろわん
 
 
 =head2 wave2tilde
@@ -425,7 +424,6 @@ Converts the following characters into SPACE (U+0020).
   U+0085  NEXT LINE
   U+00A0  NO-BREAK SPACE
   U+1680  OGHAM SPACE MARK
-  U+180E  MONGOLIAN VOWEL SEPARATOR
   U+2000  EN QUAD
   U+2001  EM QUAD
   U+2002  EN SPACE
@@ -515,7 +513,7 @@ Converts CHARACTER TABULATION (U+0009) into SPACE (U+0020).
 
 =head2 remove_controls
 
-Removes the following characters:
+Removes the following control characters:
 
   U+0000 .. U+0008
   U+000B
@@ -547,7 +545,6 @@ Removes the following Directional Formatting Characters:
   U+202D  LEFT-TO-RIGHT OVERRIDE
   U+202E  RIGHT-TO-LEFT OVERRIDE
 
-
 See L<http://www.unicode.org/reports/tr9/> for more information about Directional Formatting Characters.
 
 
@@ -558,6 +555,8 @@ Removes SPACE (U+0020) and IDEOGRAPHIC SPACE (U+3000).
 =head2 dakuon_normalize, handakuon_normalize, all_dakuon_normalize
 
 See L<Lingua::JA::Dakuon>.
+
+Note that Lingua::JA::NormalizeText enables $Lingua::JA::Dakuon::EnableCombining flag.
 
 =head2 square2katakana, circled2kana, circled2kanji
 

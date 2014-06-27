@@ -27,11 +27,10 @@ Lingua::JA::NormalizeText - All-in-One Japanese text normalizer
 
     my $text = old2new_kanji('惡の華'); # => '悪の華'
 
-
-
 # DESCRIPTION
 
-All-in-One Japanese text normalizer.
+This module provides a lot of Japanese text normalization options.
+These options facilitate Japanese text pre-processing.
 
 # METHODS
 
@@ -65,8 +64,8 @@ The following options are available:
     wave2long              〜, 〰                 ー
     tilde2long             ～                     ー
     fullminus2long         －                     ー
-    dashes2long            —                      ー
-    drawing_lines2long     ─                      ー
+    dashes2long            —                     ー
+    drawing_lines2long     ─                     ー
     unify_long_repeats     ヴァーーー             ヴァー
     nl2space               (LF)(CR)(CRLF}         (space)(space)(space)
     unify_nl               (LF)(CR)(CRLF)         \n\n\n
@@ -96,13 +95,9 @@ the elements of @options.
 External functions can be added.
 (See dearinsu\_to\_desu function of the SYNOPSIS section.)
 
-
-
 ## normalize($text)
 
 normalizes $text.
-
-
 
 # OPTIONS
 
@@ -128,19 +123,17 @@ Converts English alphabet, numbers and symbols ZENKAKU <-> HANKAKU.
 
 ZENKAKU:
 
-    ＇［ｖｏ，～４ｃ９Ｆｕ＿ＭＧＴＷＰｑ￣｠ＶｉＩｒ：ＺＸ］ｌ＞
-    ｝￦！｜ｘ６％ｔ＾８ｅＤＫ５ｊ－￠ｈ１｛Ｕ２ＮＨ＆０＃Ｏｎ￢
-    ＠｟ｆ３ＱａｐＪ￥？Ａｗ＼＄＂ＢｍＣ７；￤＝ｙ＋ｇＹＲｂＬｋ
-    ）Ｓ｀Ｅ（￡＊．ｚｓ／＜ｄ
+    ！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞
+    ？＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ［＼
+    ］＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ
+    ｛｜｝～｟｠￠￡￢￣￤￥￦
 
 HANKAKU:
 
-    '[vo,~4c9Fu_MGTWPq¯⦆ViIr:ZX]l>
-    }₩!|x6%t^8eDK5j-¢h1{U2NH&0#On¬
-    @⦅f3QapJ¥?Aw\$"BmC7;¦=y+gYRbLk
-    )S`E(£*.zs/<d
-
-
+    !"#$%&'()*+,-./0123456789:;<=>
+    ?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\
+    ]^_`abcdefghijklmnopqrstuvwxyz
+    {|}~¢£¥¦¬¯₩⦅⦆
 
 ## space\_z2h, space\_h2z
 
@@ -152,43 +145,36 @@ Converts katakanas ZENKAKU <-> HANKAKU.
 
 See [Lingua::JA::Regular::Unicode](https://metacpan.org/pod/Lingua::JA::Regular::Unicode).
 
-
-
 ## hiragana2katakana
 
 INPUT:
 
-    ぷゔにむていでべゞゐふとおりげそづよはつざしゃのっねひぃたょ
-    けまれびやがぽぬぺくぞぱごをへずかぴゅゎあきゖぇどだろもえわ
-    んぶぜめなちばぢるすぁゕぼらぉゝぐほさゑぎみせじこぅゆう
+    ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞ
+    ただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼ
+    ぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖゝゞ
 
 OUTPUT FOR INPUT:
 
-    プヴニムテイデベヾヰフトオリゲソヅヨハツザシャノッネヒィタョ
-    ケマレビヤガポヌペクゾパゴヲヘズカピュヮアキヶェドダロモエワ
-    ンブゼメナチバヂルスァヵボラォヽグホサヱギミセジコゥユウ
-
-
+    ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾ
+    タダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボ
+    ポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヽヾ
 
 ## katakana2hiragana
 
 INPUT:
 
-    ﾘボズシｷｭﾙﾈグネキｪヱテｸニﾄﾛドェコヽﾁガﾍトｩダヤレ
-    ﾆチソノｿｻパヨｧﾉﾊゴゲｫヮモヰルヲムｱﾃゼポフハャサッラ
-    ﾏアィョｳｵオクメﾕゥヂギﾒウﾅスｽﾗｾザブﾌヘｺｶペカｲヾ
-    エﾜヴンﾀｬﾎｮﾖツゾバプﾓセﾑｹリデﾐミホケイヒｯユﾂマヵ
-    タﾚピジｼﾇビヅヌｨﾝｴァォヶナｦュﾔロﾋベワ
+    ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾ
+    タダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボ
+    ポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヽヾ
+    ｦｧｨｩｪｫｬｭｮｯｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ
 
 OUTPUT FOR INPUT:
 
-    りぼずしきゅるねぐねきぇゑてくにとろどぇこゝちがへとぅだやれ
-    にちそのそさぱよぁのはごげぉゎもゐるをむあてぜぽふはゃさっら
-    まあぃょうおおくめゆぅぢぎめうなすすらせざぶふへこかぺかいゞ
-    えわゔんたゃほょよつぞばぷもせむけりでみみほけいひっゆつまゕ
-    たれぴじしぬびづぬぃんえぁぉゖなをゅやろひべわ
-
-
+    ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞ
+    ただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼ
+    ぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖゝゞ
+    をぁぃぅぇぉゃゅょっあいうえおかきくけこさしすせそたちつてと
+    なにぬねのはひふへほまみむめもやゆよらりるれろわん
 
 ## wave2tilde
 
@@ -225,8 +211,6 @@ Converts the following characters into long (U+30FC).
 
 Note that this option does not convert hyphens into long.
 
-
-
 ## drawing\_line2long
 
 Converts the following characters into long (U+30FC).
@@ -239,8 +223,6 @@ Converts the following characters into long (U+30FC).
     U+2576  BOX DRAWINGS LIGHT RIGHT
     U+2578  BOX DRAWINGS HEAVY LEFT
     U+257A  BOX DRAWINGS HEAVY RIGHT
-
-
 
 ## unify\_long\_repeats
 
@@ -267,7 +249,6 @@ Converts the following characters into SPACE (U+0020).
     U+0085  NEXT LINE
     U+00A0  NO-BREAK SPACE
     U+1680  OGHAM SPACE MARK
-    U+180E  MONGOLIAN VOWEL SEPARATOR
     U+2000  EN QUAD
     U+2001  EM QUAD
     U+2002  EN SPACE
@@ -291,8 +272,6 @@ Note that this option does not convert the following characters:
     U+000D  CARRIAGE RETURN
     U+3000  IDEOGRAPHIC SPACE
 
-
-
 ## trim
 
 Removes leading and trailing whitespace.
@@ -315,8 +294,6 @@ Removes only trailing whitespace.
     ヱ     エ
     ヸ     イ゙ (U+30A4, U+3099)
     ヹ     エ゙ (U+30A8, U+3099)
-
-
 
 ## old2new\_kanji
 
@@ -352,15 +329,13 @@ OUTPUT FOR INPUT:
     薬訳予余与誉揺様謡来頼乱欄覧隆竜虜両猟緑塁涙類励礼隷霊齢暦歴
     恋練錬炉労廊朗楼郎録湾尭巌晋槙渚猪琢瑶祐禄禎穣聡遥
 
-
-
 ## tab2space
 
 Converts CHARACTER TABULATION (U+0009) into SPACE (U+0020).
 
 ## remove\_controls
 
-Removes the following characters:
+Removes the following control characters:
 
     U+0000 .. U+0008
     U+000B
@@ -373,8 +348,6 @@ Note that this option does not remove the following characters:
     U+0009  CHARACTER TABULATION
     U+000A  LINE FEED
     U+000D  CARRIAGE RETURN
-
-
 
 ## remove\_DFC
 
@@ -393,11 +366,7 @@ Removes the following Directional Formatting Characters:
     U+202D  LEFT-TO-RIGHT OVERRIDE
     U+202E  RIGHT-TO-LEFT OVERRIDE
 
-
-
 See [http://www.unicode.org/reports/tr9/](http://www.unicode.org/reports/tr9/) for more information about Directional Formatting Characters.
-
-
 
 ## remove\_spaces
 
@@ -406,6 +375,8 @@ Removes SPACE (U+0020) and IDEOGRAPHIC SPACE (U+3000).
 ## dakuon\_normalize, handakuon\_normalize, all\_dakuon\_normalize
 
 See [Lingua::JA::Dakuon](https://metacpan.org/pod/Lingua::JA::Dakuon).
+
+Note that Lingua::JA::NormalizeText enables $Lingua::JA::Dakuon::EnableCombining flag.
 
 ## square2katakana, circled2kana, circled2kanji
 
@@ -416,8 +387,6 @@ See [Lingua::JA::Moji](https://metacpan.org/pod/Lingua::JA::Moji).
 Decomposes the following parenthesized kanji:
 
     ㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩㈪㈫㈬㈭㈮㈯㈰㈱㈲㈳㈴㈵㈶㈷㈸㈹㈺㈻㈼㈽㈾㈿㉀㉁㉂㉃
-
-
 
 # AUTHOR
 
